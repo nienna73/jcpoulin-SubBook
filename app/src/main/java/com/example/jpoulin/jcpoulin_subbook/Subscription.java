@@ -6,7 +6,7 @@ import java.util.Date;
  * Created by jpoulin on 2018-02-01.
  */
 
-public abstract class Subscription  {
+public class Subscription  {
     private String name;
     private Date date;
     private Float amount;

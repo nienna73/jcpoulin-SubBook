@@ -6,7 +6,50 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
-public class MainActivity extends AppCompatActivity {
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import android.app.Activity;
+import android.content.Context;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+
+public class MainActivity extends Activity {
+
+    private static final String FILENAME = "savedata.sav";
+    private EditText bodyText;
+   //  private ListView allSubs;
+    private ListView subsView;
+
+    private ArrayList<Subscription> subsList;
+    private ArrayAdapter<Subscription> adapter;
+
+
+    /**
+     * States what should be done when a new subscription is created.
+     *
+     * @param savedInstanceState holds the last saved state of the app
+     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,5 +62,42 @@ public class MainActivity extends AppCompatActivity {
     public void addSub(View view) {
         Intent intent = new Intent(this, AddNewSub.class);
         startActivity(intent);
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        loadFromFile();
+        subsView = findViewById(R.id.allSubsList);
+        adapter = new ArrayAdapter<Subscription>(this, R.layout.list_item, subsList);
+        subsView.setAdapter(adapter);
+    }
+
+    private void loadFromFile() {
+        ArrayList<String> subs = new ArrayList<String>();
+        try {
+            FileInputStream fis = openFileInput(FILENAME);
+            BufferedReader in = new BufferedReader(new InputStreamReader(fis));
+
+            Gson gson = new Gson();
+
+            //Taken from a stack overflow answer found in lab
+            // https://stackoverflow.com/questions/12384064/gson-convert-from-json-to-a-typed-arraylistt
+            // 2018-01-24
+
+            Type listType = new TypeToken<ArrayList<NewSub>>(){}.getType();
+
+            subsView = gson.fromJson(in, listType);
+
+
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            subsList = new ArrayList<Subscription>();
+        }  /* catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } */
+
     }
 }
