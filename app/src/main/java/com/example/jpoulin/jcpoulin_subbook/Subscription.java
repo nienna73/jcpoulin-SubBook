@@ -1,6 +1,11 @@
 package com.example.jpoulin.jcpoulin_subbook;
 
+import org.w3c.dom.Text;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by jpoulin on 2018-02-01.
@@ -24,28 +29,41 @@ public class Subscription  {
         this.comment = comment;
     }
 
-    public Date getDate() { return date; }
+    public Date getDate() {
+        return date;
+    }
 
     public String getName() { return name; }
 
-    public Float getAmount() { return amount; }
+    public Float getAmount() {
+        return amount;
+    }
 
     public String getComment() { return comment; }
 
-    public void setName(String name) throws NameTooLongException {
+    public void setName(String name) throws NameTooLongException, FieldTooShortException {
         if (name.length() > 20) {
             // throw an error
             throw new NameTooLongException();
+        } else if (name.length() == 0) {
+            throw new FieldTooShortException();
         }
 
         this.name = name;
     }
 
-    public void setDate(Date date) {
+    public void setDate(Date date) throws FieldTooShortException {
+        if (date == null) {
+            throw new FieldTooShortException();
+        }
+
         this.date = date;
     }
 
-    public void setAmount(Float amount) {
+    public void setAmount(Float amount) throws FieldTooShortException {
+        if (amount == null) {
+            throw new FieldTooShortException();
+        }
         this.amount = amount;
     }
 

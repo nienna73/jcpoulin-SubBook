@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -36,13 +37,14 @@ import com.google.gson.reflect.TypeToken;
 
 public class MainActivity extends Activity {
 
-    private static final String FILENAME = "savedata.sav";
+    private static final String FILENAME = "data.sav";
     private EditText bodyText;
-   //  private ListView allSubs;
+    private ListView allSubs;
     private ListView subsView;
 
-    private ArrayList<Subscription> subsList;
-    private ArrayAdapter<Subscription> adapter;
+    private ArrayList<Subscription> subsList = new ArrayList<Subscription>();
+    private SubscriptionAdapter adapter;
+
 
 
     /**
@@ -54,6 +56,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        loadFromFile();
         setContentView(R.layout.activity_main);
     }
 
@@ -63,6 +66,7 @@ public class MainActivity extends Activity {
         Intent intent = new Intent(this, AddNewSub.class);
         startActivity(intent);
 
+
     }
 
     @Override
@@ -70,8 +74,20 @@ public class MainActivity extends Activity {
         super.onStart();
         loadFromFile();
         subsView = findViewById(R.id.allSubsList);
-        adapter = new ArrayAdapter<Subscription>(this, R.layout.list_item, subsList);
+        adapter = new SubscriptionAdapter(this, R.layout.list_item, subsList);
         subsView.setAdapter(adapter);
+
+         Date newDate = new Date();
+        try {
+            newDate = new SimpleDateFormat("yyyy-MM-dd").parse("2018-01-01");
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+        }
+
+        Float newFloat = 5.74f;
+        Subscription newSub = new Subscription("Name", newDate, newFloat, "Hello");
+        subsList.add(newSub);
+        adapter.notifyDataSetChanged();
     }
 
     private void loadFromFile() {
@@ -86,7 +102,7 @@ public class MainActivity extends Activity {
             // https://stackoverflow.com/questions/12384064/gson-convert-from-json-to-a-typed-arraylistt
             // 2018-01-24
 
-            Type listType = new TypeToken<ArrayList<NewSub>>(){}.getType();
+            Type listType = new TypeToken<ArrayList<Subscription>>(){}.getType();
 
             subsView = gson.fromJson(in, listType);
 

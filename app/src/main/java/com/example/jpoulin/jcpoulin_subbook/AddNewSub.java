@@ -54,13 +54,13 @@ public class AddNewSub extends Activity {
     private ListView subsView;
 
     private ArrayList<Subscription> subsList = new ArrayList<Subscription>();
-    private ArrayAdapter<Subscription> adapter;
+    private SubscriptionAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_sub);
-        adapter = new ArrayAdapter<Subscription>(this, R.layout.list_item, subsList);
+        adapter = new SubscriptionAdapter(this, R.layout.list_item, subsList);
 
         /* Get parent view info taken from:
         https://stackoverflow.com/questions/17879743/get-parents-view-from-a-layout
@@ -75,6 +75,7 @@ public class AddNewSub extends Activity {
         Button saveButton = (Button) findViewById(R.id.save);
         subsView = (ListView) findViewById(R.id.allSubsList);
 
+
         saveButton.setOnClickListener(new View.OnClickListener(){
             public void onClick (View v) {
                 setResult(RESULT_OK);
@@ -88,7 +89,7 @@ public class AddNewSub extends Activity {
                    https://stackoverflow.com/questions/4216745/java-string-to-date-conversion
                  */
 
-                DateFormat format = new SimpleDateFormat("yyyyMMdd", Locale.ENGLISH);
+                DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
                 Date dateFormatted = new Date();
                 try {
                     dateFormatted = format.parse(dateStr);
@@ -120,9 +121,6 @@ public class AddNewSub extends Activity {
     @Override
     protected void onStart() {
         super.onStart();
-      //  loadFromFile();
-        //adapter = new ArrayAdapter<Subscription>(this, R.layout.list_item, subsList);
-//        subsView.setAdapter(adapter);
     }
 
 
@@ -175,6 +173,7 @@ public class AddNewSub extends Activity {
 
    /* Called when save button is pressed */
     public void goHome(View view) {
+        adapter.notifyDataSetChanged();
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
