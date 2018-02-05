@@ -33,7 +33,6 @@ import com.google.gson.reflect.TypeToken;
 public class MainActivity extends AppCompatActivity {
 
     private static final String FILENAME = "savefile.json";
-    private EditText bodyText;
     private ListView allSubs;
     private ListView subsView;
     private String listIndex;
@@ -49,10 +48,14 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        /* Called when app is created */
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         loadFromFile();
         Float totalChargeAmt = calcTotalCharge();
+
+        // Find the view for the subscriptions list, instantiate custom adapter for list
         adapter = new SubscriptionAdapter(this, R.layout.list_item, subsList);
         subsView = findViewById(R.id.allSubsList);
 
@@ -61,11 +64,13 @@ public class MainActivity extends AppCompatActivity {
         https://stackoverflow.com/questions/20778181/how-to-make-custom-listview-to-open-other-activities-when-clicking-list-item
          */
 
+        // Calculate total monthly charge
         TextView totalCharge = (TextView) findViewById(R.id.totalAmount);
 
         NumberFormat formatter = NumberFormat.getCurrencyInstance();
         totalCharge.setText("Total monthly charge: " + formatter.format(totalChargeAmt));
 
+        // State what happens when a list item is clicked
         subsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -76,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+        // Get new subscription from AddNewSub and add it to the subscriptions list
         AddNewSub testSubSuper = new AddNewSub();
         Subscription testSub = testSubSuper.getNewSub();
 
@@ -83,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
             subsList.add(testSub);
         }
 
+        // Load the list from file
         loadFromFile();
         adapter.notifyDataSetChanged();
 
@@ -107,6 +114,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadFromFile() {
+        // Load the list of subscriptions from the save data file
+
         ArrayList<String> subs = new ArrayList<String>();
 
         try {
@@ -115,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
 
             Gson gson = new Gson();
 
-            //Taken from a stack overflow answer found in lab
+            // Taken from a stack overflow answer found in lab
             // https://stackoverflow.com/questions/12384064/gson-convert-from-json-to-a-typed-arraylistt
             // 2018-01-24
 
@@ -131,6 +140,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private float calcTotalCharge() {
+        // Iterate over the list and calculate the total monthly charge
+
         Float total = 0.0f;
         Iterator itr = subsList.iterator();
         while (itr.hasNext()) {
