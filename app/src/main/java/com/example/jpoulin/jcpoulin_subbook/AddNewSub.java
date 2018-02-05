@@ -49,7 +49,7 @@ import com.google.gson.reflect.TypeToken;
  * Created by jpoulin on 2018-02-01.
  */
 
-public class AddNewSub extends Activity {
+public class AddNewSub extends AppCompatActivity {
 
     private static final String FILENAME = "savedata.json";
     private EditText name;

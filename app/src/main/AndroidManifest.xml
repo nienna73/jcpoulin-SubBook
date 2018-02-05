@@ -21,6 +21,16 @@
                 android:name="android.supper.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
+        <activity android:name=".InspectSub">
+            <meta-data
+                android:name="android.supper.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        <activity android:name=".EditSub">
+            <meta-data
+                android:name="android.supper.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
     </application>
 
 </manifest>

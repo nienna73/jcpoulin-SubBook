@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 
 import java.io.BufferedReader;
@@ -38,15 +39,20 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
 
     private static final String FILENAME = "savedata.json";
     private EditText bodyText;
     private ListView allSubs;
     private ListView subsView;
+    private String listIndex;
 
     private ArrayList<Subscription> subsList = new ArrayList<Subscription>();
     private SubscriptionAdapter adapter;
+
+    MainActivity() {
+
+    }
 
 
 
@@ -60,8 +66,23 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        loadFromFile();
         adapter = new SubscriptionAdapter(this, R.layout.list_item, subsList);
         subsView = findViewById(R.id.allSubsList);
+
+
+        /* For how to add an onClickListener to each list item:
+        https://stackoverflow.com/questions/20778181/how-to-make-custom-listview-to-open-other-activities-when-clicking-list-item
+         */
+
+        subsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(MainActivity.this, InspectSub.class);
+                intent.putExtra(listIndex, position);
+                startActivity(intent);
+            }
+        });
 
 
         AddNewSub testSubSuper = new AddNewSub();
@@ -117,5 +138,6 @@ public class MainActivity extends Activity {
         }
 
     }
+
 
 }
