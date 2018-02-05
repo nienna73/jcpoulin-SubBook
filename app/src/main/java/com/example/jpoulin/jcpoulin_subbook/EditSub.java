@@ -22,6 +22,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -70,15 +72,16 @@ public class EditSub extends AppCompatActivity {
         passedComments = intent.getStringExtra("passedComments");
         passedIndex = intent.getIntExtra("passedIndex", 0);
 
-
         nameField = (EditText) findViewById(R.id.name);
         amountField = (EditText) findViewById(R.id.amount);
         dateField = (EditText) findViewById(R.id.date);
         commentsField = (EditText) findViewById(R.id.comments);
         Button saveButton = (Button) findViewById(R.id.save);
 
+        NumberFormat formatter = NumberFormat.getCurrencyInstance();
+
         nameField.setText(passedName);
-        amountField.setText(passedAmount);
+        amountField.setText(formatter.format(passedAmount));
         dateField.setText(passedDate);
         commentsField.setText(passedComments);
 
@@ -102,6 +105,10 @@ public class EditSub extends AppCompatActivity {
 
                 Subscription newSub = new Subscription(editedName, dateFormatted, amountFl, editedComments);
 
+                /* For replacing an element at a given index:
+                   https://docs.oracle.com/javase/7/docs/api/java/util/List.html#set%28int,%20E%29
+                 */
+
                 subsList.set(passedIndex, newSub);
 
                 saveInFile();
@@ -112,7 +119,6 @@ public class EditSub extends AppCompatActivity {
         });
 
     }
-
 
     private void loadFromFile() {
         ArrayList<Subscription> subs = new ArrayList<Subscription>();

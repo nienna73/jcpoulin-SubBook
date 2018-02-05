@@ -23,6 +23,7 @@ import java.io.PrintWriter;
 import java.io.Writer;
 import java.lang.reflect.Type;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -116,7 +117,6 @@ public class AddNewSub extends AppCompatActivity {
 
                 Float amountFl = Float.parseFloat(amountStr);
 
-
                 newSub = new Subscription(nameStr, dateFormatted, amountFl, commStr);
 
                 if (subsList != null) {
@@ -190,11 +190,7 @@ public class AddNewSub extends AppCompatActivity {
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
             subsList = new ArrayList<Subscription>();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
         }
-
     }
 
    /* Called when save button is pressed */

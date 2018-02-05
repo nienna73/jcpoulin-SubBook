@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 
 /**
@@ -50,8 +51,9 @@ public class SubscriptionAdapter extends ArrayAdapter<Subscription> {
             }
 
             if (amount != null) {
-                String amountStr = sub.getAmount().toString();
-                amount.setText(amountStr);
+                Float amountStr = sub.getAmount();
+                NumberFormat formatter = NumberFormat.getCurrencyInstance();
+                amount.setText(formatter.format(amountStr));
             }
         }
         return v;

@@ -18,9 +18,12 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.lang.reflect.Type;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import android.app.Activity;
@@ -32,6 +35,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -67,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         loadFromFile();
+        Float totalChargeAmt = calcTotalCharge();
         adapter = new SubscriptionAdapter(this, R.layout.list_item, subsList);
         subsView = findViewById(R.id.allSubsList);
 
@@ -74,6 +79,11 @@ public class MainActivity extends AppCompatActivity {
         /* For how to add an onClickListener to each list item:
         https://stackoverflow.com/questions/20778181/how-to-make-custom-listview-to-open-other-activities-when-clicking-list-item
          */
+
+        TextView totalCharge = (TextView) findViewById(R.id.totalAmount);
+
+        NumberFormat formatter = NumberFormat.getCurrencyInstance();
+        totalCharge.setText("Total monthly charge: " + formatter.format(totalChargeAmt));
 
         subsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -137,6 +147,16 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+    }
+
+    private float calcTotalCharge() {
+        Float total = 0.0f;
+        Iterator itr = subsList.iterator();
+        while (itr.hasNext()) {
+            Subscription x = (Subscription) itr.next();
+            total = total + x.getAmount();
+        }
+        return total;
     }
 
 
