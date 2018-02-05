@@ -11,9 +11,11 @@ import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -32,12 +34,13 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 
 public class MainActivity extends Activity {
 
-    private static final String FILENAME = "data.sav";
+    private static final String FILENAME = "savedata.json";
     private EditText bodyText;
     private ListView allSubs;
     private ListView subsView;
@@ -56,8 +59,21 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        loadFromFile();
         setContentView(R.layout.activity_main);
+        adapter = new SubscriptionAdapter(this, R.layout.list_item, subsList);
+        subsView = findViewById(R.id.allSubsList);
+
+
+        AddNewSub testSubSuper = new AddNewSub();
+        Subscription testSub = testSubSuper.getNewSub();
+
+        if (testSub != null) {
+            subsList.add(testSub);
+        }
+
+        loadFromFile();
+        adapter.notifyDataSetChanged();
+
     }
 
 
@@ -65,33 +81,22 @@ public class MainActivity extends Activity {
     public void addSub(View view) {
         Intent intent = new Intent(this, AddNewSub.class);
         startActivity(intent);
-
-
+        adapter.notifyDataSetChanged();
     }
+
 
     @Override
     protected void onStart() {
         super.onStart();
         loadFromFile();
-        subsView = findViewById(R.id.allSubsList);
         adapter = new SubscriptionAdapter(this, R.layout.list_item, subsList);
         subsView.setAdapter(adapter);
 
-         Date newDate = new Date();
-        try {
-            newDate = new SimpleDateFormat("yyyy-MM-dd").parse("2018-01-01");
-        } catch (java.text.ParseException e) {
-            e.printStackTrace();
-        }
-
-        Float newFloat = 5.74f;
-        Subscription newSub = new Subscription("Name", newDate, newFloat, "Hello");
-        subsList.add(newSub);
-        adapter.notifyDataSetChanged();
     }
 
     private void loadFromFile() {
         ArrayList<String> subs = new ArrayList<String>();
+
         try {
             FileInputStream fis = openFileInput(FILENAME);
             BufferedReader in = new BufferedReader(new InputStreamReader(fis));
@@ -104,16 +109,13 @@ public class MainActivity extends Activity {
 
             Type listType = new TypeToken<ArrayList<Subscription>>(){}.getType();
 
-            subsView = gson.fromJson(in, listType);
-
+            subsList = gson.fromJson(in, listType);
 
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
-            subsList = new ArrayList<Subscription>();
-        }  /* catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
-        } */
+        }
 
     }
+
 }
