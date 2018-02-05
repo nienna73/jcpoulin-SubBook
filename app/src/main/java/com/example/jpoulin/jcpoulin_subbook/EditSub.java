@@ -21,21 +21,21 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
-import java.text.DateFormat;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
+
 
 /**
  * Created by jpoulin on 2018-02-05.
+ *
+ * This class allows the user to edit an existing subscription.
+ * It opens the add_sub screen and fills it in with the existing subscription information
+ * Upon clicking save, the pre-existing subscription is replaced with the edited subscription
+ *
  */
 
 public class EditSub extends AppCompatActivity {
 
-    private static final String FILENAME = "savedata.json";
+    private static final String FILENAME = "savefile.json";
     private String passedName;
     private String passedDate;
     private String passedAmount;
@@ -78,10 +78,8 @@ public class EditSub extends AppCompatActivity {
         commentsField = (EditText) findViewById(R.id.comments);
         Button saveButton = (Button) findViewById(R.id.save);
 
-        NumberFormat formatter = NumberFormat.getCurrencyInstance();
-
         nameField.setText(passedName);
-        amountField.setText(formatter.format(passedAmount));
+        amountField.setText(passedAmount);
         dateField.setText(passedDate);
         commentsField.setText(passedComments);
 
@@ -95,15 +93,7 @@ public class EditSub extends AppCompatActivity {
 
                 Float amountFl = Float.parseFloat(editedAmount);
 
-                DateFormat format = new SimpleDateFormat("yyyy-MM-DD", Locale.ENGLISH);
-                Date dateFormatted = new Date();
-                try {
-                    dateFormatted = format.parse(editedDate);
-                } catch (java.text.ParseException e) {
-                    e.printStackTrace();
-                }
-
-                Subscription newSub = new Subscription(editedName, dateFormatted, amountFl, editedComments);
+                Subscription newSub = new Subscription(editedName, editedDate, amountFl, editedComments);
 
                 /* For replacing an element at a given index:
                    https://docs.oracle.com/javase/7/docs/api/java/util/List.html#set%28int,%20E%29
@@ -148,8 +138,6 @@ public class EditSub extends AppCompatActivity {
 
     private void saveInFile() {
         try {
-            // check file add method and sub save method
-            // either overwriting previous one or only loading last-saved on
 
             FileOutputStream fos = openFileOutput(FILENAME,
                     Context.MODE_PRIVATE);
@@ -169,8 +157,8 @@ public class EditSub extends AppCompatActivity {
         }
     }
 
-    /* Called when save button is pressed */
     public void goHome(View view) {
+        /* Called when save button is pressed */
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }

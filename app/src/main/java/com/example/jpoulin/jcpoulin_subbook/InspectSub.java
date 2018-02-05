@@ -30,11 +30,15 @@ import java.util.Iterator;
 
 /**
  * Created by jpoulin on 2018-02-04.
+ *
+ * This class allows the user to view the details of an existing subscription,
+ * open the subscription for editing, and delete the subscription all together.
+ *
  */
 
 public class InspectSub extends AppCompatActivity {
 
-    private static final String FILENAME = "savedata.json";
+    private static final String FILENAME = "savefile.json";
     private String name;
     private String date;
     private String amount;
@@ -89,9 +93,7 @@ public class InspectSub extends AppCompatActivity {
     }
 
     private void updateInfo() {
-        MainActivity position = new MainActivity();
         passed = getIntent().getIntExtra(listIndex, 0);
-        SubscriptionAdapter adapter = new SubscriptionAdapter(this, R.layout.list_item, subsList);
         Subscription testSub = subsList.get(passed);
 
         name = testSub.getName();
@@ -140,8 +142,6 @@ public class InspectSub extends AppCompatActivity {
 
     private void saveInFile() {
         try {
-            // check file add method and sub save method
-            // either overwriting previous one or only loading last-saved on
 
             FileOutputStream fos = openFileOutput(FILENAME,
                     Context.MODE_PRIVATE);

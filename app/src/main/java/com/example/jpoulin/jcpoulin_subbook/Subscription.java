@@ -13,7 +13,7 @@ import java.util.Locale;
 
 public class Subscription  {
     private String name;
-    private Date date;
+    private String date;
     private Float amount;
     private String comment;
 
@@ -22,14 +22,14 @@ public class Subscription  {
     }
 
 
-    public Subscription(String name, Date date, Float amount, String comment) {
+    public Subscription(String name, String date, Float amount, String comment) {
         this.name = name;
         this.date = date;
         this.amount = amount;
         this.comment = comment;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
@@ -52,7 +52,7 @@ public class Subscription  {
         this.name = name;
     }
 
-    public void setDate(Date date) throws FieldTooShortException {
+    public void setDate(String date) throws FieldTooShortException {
         if (date == null) {
             throw new FieldTooShortException();
         }

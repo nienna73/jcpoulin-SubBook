@@ -8,44 +8,31 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.lang.reflect.Type;
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
-import java.util.List;
 
-import android.app.Activity;
-import android.content.Context;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+
+/**
+ * Created by Jolene Poulin on 2018-01-29
+ *
+ * The main activity for the app, controls what happens on most clicks, displays subscriptions
+ *
+ */
 
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String FILENAME = "savedata.json";
+    private static final String FILENAME = "savefile.json";
     private EditText bodyText;
     private ListView allSubs;
     private ListView subsView;
@@ -53,12 +40,6 @@ public class MainActivity extends AppCompatActivity {
 
     private ArrayList<Subscription> subsList = new ArrayList<Subscription>();
     private SubscriptionAdapter adapter;
-
-    MainActivity() {
-
-    }
-
-
 
     /**
      * States what should be done when a new subscription is created.

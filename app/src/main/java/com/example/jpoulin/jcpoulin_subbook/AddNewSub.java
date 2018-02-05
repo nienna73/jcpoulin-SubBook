@@ -3,56 +3,40 @@ package com.example.jpoulin.jcpoulin_subbook;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.io.Writer;
 import java.lang.reflect.Type;
-import java.text.DateFormat;
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
 
-import android.app.Activity;
 import android.content.Context;
-import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
-
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 
 /**
  * Created by jpoulin on 2018-02-01.
+ *
+ * This activity states what happens when a new subscription is added.
+ * It loads the add_sub screen and gets then stores user input
+ *
  */
 
 public class AddNewSub extends AppCompatActivity {
 
-    private static final String FILENAME = "savedata.json";
+    private static final String FILENAME = "savefile.json";
     private EditText name;
     private EditText amount;
     private EditText date;
@@ -68,6 +52,7 @@ public class AddNewSub extends AppCompatActivity {
     }
 
     public AddNewSub(Subscription newSub) {
+        // In order to make newSub accessible outside of AddNewSub:
         this.newSub = newSub;
     }
 
@@ -76,12 +61,6 @@ public class AddNewSub extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_sub);
         adapter = new SubscriptionAdapter(this, R.layout.list_item, subsList);
-
-        /* Get parent view info taken from:
-        https://stackoverflow.com/questions/17879743/get-parents-view-from-a-layout
-         */
-
-       // RelativeLayout parent = (RelativeLayout) ((ViewGroup) this.getParent()).getParent();
 
         name = (EditText) findViewById(R.id.name);
         amount = (EditText) findViewById(R.id.amount);
@@ -99,25 +78,13 @@ public class AddNewSub extends AppCompatActivity {
                 String dateStr = date.getText().toString();
                 String amountStr = amount.getText().toString();
 
-                /* Date conversion taken from:
-                   https://stackoverflow.com/questions/4216745/java-string-to-date-conversion
-                 */
-
-                DateFormat format = new SimpleDateFormat("yyyy-MM-DD", Locale.ENGLISH);
-                Date dateFormatted = new Date();
-                try {
-                    dateFormatted = format.parse(dateStr);
-                } catch (java.text.ParseException e) {
-                    e.printStackTrace();
-                }
-
                 /* String to float conversion taken from:
                    https://stackoverflow.com/questions/7552660/java-convert-float-to-string-and-string-to-float
                  */
 
                 Float amountFl = Float.parseFloat(amountStr);
 
-                newSub = new Subscription(nameStr, dateFormatted, amountFl, commStr);
+                newSub = new Subscription(nameStr, dateStr, amountFl, commStr);
 
                 if (subsList != null) {
                     subsList.add(newSub);
@@ -141,18 +108,13 @@ public class AddNewSub extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-
         super.onStart();
         loadFromFile();
     }
 
-// removed load from file function from right here
 
     private void saveInFile() {
         try {
-            // check file add method and sub save method
-            // either overwriting previous one or only loading last-saved on
-
             FileOutputStream fos = openFileOutput(FILENAME,
                     Context.MODE_PRIVATE);
             BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
@@ -193,8 +155,10 @@ public class AddNewSub extends AppCompatActivity {
         }
     }
 
-   /* Called when save button is pressed */
+
     public void goHome(View view) {
+        /* Called when save button is pressed
+         * Runs MainActivity */
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }

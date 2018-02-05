@@ -14,6 +14,9 @@ import java.util.ArrayList;
  * Created by jpoulin on 2018-02-04.
  * Citing:
  * https://stackoverflow.com/questions/19775527/android-listview-custom-listitem-not-displayed-correctly
+ *
+ * This is a custom adapter for properly displaying the subscription items in a list view
+ *
  */
 
 public class SubscriptionAdapter extends ArrayAdapter<Subscription> {
@@ -51,6 +54,9 @@ public class SubscriptionAdapter extends ArrayAdapter<Subscription> {
             }
 
             if (amount != null) {
+                /* For displaying using the currency format:
+                   https://stackoverflow.com/questions/13791409/java-format-double-value-as-dollar-amount
+                 */
                 Float amountStr = sub.getAmount();
                 NumberFormat formatter = NumberFormat.getCurrencyInstance();
                 amount.setText(formatter.format(amountStr));
